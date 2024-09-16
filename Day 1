@@ -1,0 +1,75 @@
+# Daily-Challenge
+""" circalc.py -- simplistic LCR calculator for TPRG 2131 Week 2 Asmt 1
+
+Assignment 1 for Tprg 2131 intro week 1-2
+
+Tomasz Giedrojc, 100793058 and TPRG 2131-01.
+
+This LCR calculator is ugly and incomplete. The code runs but doesn't actually
+calculate anything. For full marks, you must complete the computation. You must
+also "clean up" the code according to the course style guide and coding
+standard. Specifically, you must:
+  1) Take code that is duplicated and encapsulate it into a function that is
+     called from the main program; the function must not "reach into" the
+     main program for its working values;
+  2) Rename variables so that they are not single letters, using descriptive
+     names;
+  3) Actually calculate the resonant frequency, bandwidth and Q factor for the
+     SERIES resonant circuit (look up the formulas from ELEC II).
+
+Keep working on the program. As you fix each problem, commit with an
+informative commit message.
+When done, commit with a message like "Ready for marking" and push the changes
+to your assignment1 repository on the server hg.set.durhamcollege.org.
+"""
+import math
+
+def get_positive_input(prompt):
+    """Helper function to get a positive float input from the user."""
+    value = float(input(prompt))
+    while value <= 0.0:
+        value = float(input(f"The value must be greater than zero.\n{prompt}"))
+    return value
+
+def calculate_resonant_frequency(inductance, capacitance):
+    """Calculate the resonant frequency for a series resonant circuit."""
+    # Resonant frequency formula: f = 1 / (2 * pi * sqrt(L * C))
+    frequency = 1 / (2 * math.pi * math.sqrt(inductance * capacitance))
+    return frequency
+
+def calculate_q_factor(inductance, resistance):
+    """Calculate the quality factor (Q factor) for a series resonant circuit."""
+    # Q factor formula: Q = (1 / R) * sqrt(L / C)
+    q_factor = (1 / resistance) * math.sqrt(inductance)
+    return q_factor
+
+def calculate_bandwidth(frequency, q_factor):
+    """Calculate the bandwidth for a series resonant circuit."""
+    # Bandwidth formula: BW = f / Q
+    bandwidth = frequency / q_factor
+    return bandwidth
+
+print("Series resonant circuit calculator\n(CTRL-C to quit)")
+
+while True:
+    inductance_mh = get_positive_input("What is the inductance in mH? ")
+    capacitance_uf = get_positive_input("What is the capacitance in uF? ")
+    resistance_ohms = get_positive_input("What is the resistance in ohms? ")
+
+    # Convert inductance from mH to H (Henrys) and capacitance from uF to F (Farads)
+    inductance_h = inductance_mh / 1000
+    capacitance_f = capacitance_uf / 1_000_000
+
+    # Calculate the resonant frequency, Q factor, and bandwidth
+    resonant_frequency = calculate_resonant_frequency(inductance_h, capacitance_f)
+    q_factor = calculate_q_factor(inductance_h, resistance_ohms)
+    bandwidth = calculate_bandwidth(resonant_frequency, q_factor)
+
+    # Display the results
+    print(f"\nResults for L = {inductance_mh} mH, C = {capacitance_uf} uF, R = {resistance_ohms} ohms:")
+    print(f"Resonant Frequency: {resonant_frequency:.2f} Hz")
+    print(f"Q Factor: {q_factor:.2f}")
+    print(f"Bandwidth: {bandwidth:.2f} Hz\n")
+    
+    
+    
